@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7fbff">
+  <title>RIDE 2100 — Your Next Ride. Every Mode. For Everyone.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="brand" data-screen="home" aria-label="RIDE 2100 home"><span class="logo">∞</span><span>RIDE <b>2100</b><small>Your Next Ride. Every Mode. For Everyone.</small></span></button>
+    <nav><button class="nav active" data-screen="home">Home</button><button class="nav" data-screen="journey">Journey</button><button class="nav" data-screen="live">Live Map</button></nav>
+    <div class="top-actions"><button class="icon-btn" id="bellBtn">◔<i></i></button><button class="profile">◉ <span>Hello, Traveler</span>⌄</button><button class="easy" id="accessBtn">☼ <span>Easy Mode</span></button></div>
+  </header>
+
+  <main>
+    <section id="home" class="screen active">
+      <div class="hero">
+        <img src="assets/hero-city.jpg" alt="Futuristic smart city with autonomous transport" class="hero-bg">
+        <div class="hero-shade"></div>
+        <div class="hero-copy">
+          <span class="eyebrow">THE 2100 MOBILITY LAYER</span>
+          <h1>Move through<br><em>the future.</em></h1>
+          <p>One intelligent journey across autonomous buses, maglev rail, air mobility and smart roads.</p>
+          <div class="hero-actions"><button class="primary" id="heroPlan">Plan a journey <b>→</b></button><button class="ghost-light" id="heroLive">Explore live network</button></div>
+        </div>
+        <div class="floating-transport t1">🚌<span> A12 · 2 min</span></div>
+        <div class="floating-transport t2">✈<span> Skyway · 7 min</span></div>
+        <div class="floating-transport t3">🚆<span> M03 · On time</span></div>
+        <div class="hero-orbit orbit1"></div><div class="hero-orbit orbit2"></div>
+        <div class="hero-live"><span class="pulse"></span> City network live <b>98.7%</b></div>
+      </div>
+
+      <div class="mode-strip">
+        <button class="mode active" data-mode="bus"><span>🚌</span><b>Bus</b><small>Autonomous · Electric</small></button>
+        <button class="mode" data-mode="train"><span>🚆</span><b>Train</b><small>Maglev · Metro</small></button>
+        <button class="mode" data-mode="air"><span>✈</span><b>Air</b><small>eVTOL · Skyport</small></button>
+        <button class="mode" data-mode="road"><span>◈</span><b>Smart Roads</b><small>Self-driving · EV</small></button>
+        <div class="mode-note"><b>Designed for everyone</b><small>Simple paths · clear language · accessible by default</small></div>
+      </div>
+
+      <div class="planner-layout">
+        <section class="planner card">
+          <div class="planner-top"><div><span class="eyebrow dark">PLAN A JOURNEY</span><h2>Where would you like to go?</h2><p>RIDE combines every mode into one simple plan.</p></div><span class="ai-badge">✦ AI ROUTING</span></div>
+          <div class="locations">
+            <label><span>FROM</span><div><i>●</i><input id="from" value="KDU Smart Campus" aria-label="From"></div></label>
+            <button id="swap" class="swap" aria-label="Swap">↕</button>
+            <label><span>TO</span><div><i class="to-dot">◆</i><input id="to" value="Colombo Fort" aria-label="To"></div></label>
+          </div>
+          <div class="preference-row"><button class="pref active">⚡ Fastest</button><button class="pref">♿ Step-free</button><button class="pref">🌿 Low energy</button><button class="pref">↔ Fewer transfers</button></div>
+          <div class="planner-bottom"><div class="network-ok"><span class="pulse"></span> All systems online</div><button class="primary big" id="find">Find my journey <b>→</b></button></div>
+        </section>
+
+        <section class="mini-map card"><div class="card-head"><span><i class="pulse"></i> LIVE NETWORK</span><button id="locate">⌖ Locate</button></div>
+          <div id="homeMap" class="image-map" aria-label="Animated RIDE 2100 live network map">
+            <img src="assets/live-map-art.jpg" alt="RIDE 2100 futuristic Colombo transport map" class="map-art">
+            <div class="map-vignette"></div>
+            <svg class="map-route route-a" viewBox="0 0 800 520" preserveAspectRatio="none" aria-hidden="true"><path d="M92 430 C205 390 245 330 330 310 S465 230 520 188 S650 120 720 88"></path></svg>
+            <div class="map-stop stop-fort"><span></span><b>Colombo Fort</b></div>
+            <div class="map-stop stop-pettah"><span></span><b>Pettah</b></div>
+            <div class="map-stop stop-wella"><span></span><b>Wellawatte</b></div>
+            <div class="map-stop stop-kdu"><span></span><b>KDU</b></div>
+            <div class="map-vehicle bus"><span>🚌</span><b>A12</b></div>
+            <div class="map-vehicle train"><span>🚆</span><b>M03</b></div>
+            <div class="map-vehicle air"><span>✈</span><b>Skyway</b></div>
+            <div class="map-live-pill"><span class="pulse"></span> LIVE · 42 corridors</div>
+            <div class="map-zoom"><button id="mapPlus" aria-label="Zoom in">+</button><button id="mapMinus" aria-label="Zoom out">−</button></div>
+          </div>
+          <div class="map-caption"><span><b>Colombo Metroplex</b><small>42 active corridors · 11,204 vehicles</small></span><strong>● Smooth</strong></div></section>
+      </div>
+
+      <section class="smart-row">
+        <article class="smart-card accessibility"><div class="smart-icon">♿</div><div><span class="eyebrow dark">DESIGNED FOR REAL PEOPLE</span><h3>Travel without the stress.</h3><p>Large touch targets, step-free options, plain language and voice guidance are built into the journey itself.</p><div class="smart-links"><button id="simple">Plan a simple journey →</button><button id="voice">◉ Hear next step</button></div></div></article>
+        <article class="smart-card intelligence"><div class="sparkles">✦ ✧ ✦</div><span class="eyebrow dark">RIDE INTELLIGENCE</span><h3>One smart plan.<br>Many ways forward.</h3><p>Predicts delays, protects transfers and adapts your route while the city changes.</p><div class="mini-route"><span>KDU</span><i></i><span>A12</span><i></i><span>M03</span><i></i><span>FORT</span></div></article>
+      </section>
+
+      <section class="discover"><div class="section-head"><div><span class="eyebrow dark">DISCOVER</span><h2>Popular destinations</h2><p class="section-sub">Pick a place and RIDE builds the next journey around you.</p></div><button class="text-btn" id="viewAll">View all →</button></div><div class="dest-grid">
+        <button class="dest" data-dest="Colombo Fort"><span class="dest-photo fort"><i>WATERFRONT</i></span><span><b>Colombo Fort</b><small>12 min · 2 modes</small></span><em>→</em></button>
+        <button class="dest" data-dest="KDU Smart Campus"><span class="dest-photo campus"><i>CAMPUS</i></span><span><b>KDU Campus</b><small>8 min · 1 mode</small></span><em>→</em></button>
+        <button class="dest" data-dest="Bandaranaike Airport"><span class="dest-photo airport"><i>AIR LINK</i></span><span><b>Airport</b><small>32 min · 3 modes</small></span><em>→</em></button>
+        <button class="dest" data-dest="Colombo Skyport"><span class="dest-photo skyport"><i>SKYPORT</i></span><span><b>Colombo Skyport</b><small>18 min · Air + Rail</small></span><em>→</em></button>
+        <button class="dest extra-dest" data-dest="Pettah Mobility Hub"><span class="dest-photo pettah"><i>MOBILITY HUB</i></span><span><b>Pettah Hub</b><small>6 min · 3 modes</small></span><em>→</em></button>
+        <button class="dest extra-dest" data-dest="Wellawatte Air Hub"><span class="dest-photo wella"><i>AIR TAXI</i></span><span><b>Wellawatte Hub</b><small>15 min · Air + Rail</small></span><em>→</em></button>
+        <button class="dest extra-dest" data-dest="Kotte Smart District"><span class="dest-photo kotte"><i>SMART DISTRICT</i></span><span><b>Kotte District</b><small>11 min · 2 modes</small></span><em>→</em></button>
+        <button class="dest extra-dest" data-dest="Port City Mobility Bay"><span class="dest-photo port"><i>PORT CITY</i></span><span><b>Port City Bay</b><small>19 min · 2 modes</small></span><em>→</em></button>
+      </div></section>
+
+      <section class="next-ride-strip">
+        <div class="next-copy"><span class="eyebrow dark">NEXT RIDE</span><h2>Your city, one moving network.</h2><p>Watch the network adapt around you — live arrivals, protected transfers and low-energy options in one place.</p></div>
+        <div class="next-stats"><button class="next-stat" data-jump="journey"><b>98%</b><span>network live</span></button><button class="next-stat" data-jump="live"><b>2 min</b><span>next vehicle</span></button><button class="next-stat" id="quickVoice"><b>Voice</b><span>guidance ready</span></button></div>
+      </section>
+
+      <section class="why"><div><span class="eyebrow">WHY RIDE 2100?</span><h2>A single interface<br>for the whole city.</h2><p class="why-copy">One clear experience across bus, rail, air and smart roads — designed to keep the important thing visible: your next step.</p></div><div class="why-grid"><span>✓ Real-time updates</span><span>✓ AI route planning</span><span>✓ Smart rebooking</span><span>✓ Inclusive by design</span><span>✓ Mobile-first</span><span>✓ Low-energy choices</span></div></section>
+      <footer><span>RIDE 2100 · Your Next Ride. Every Mode. For Everyone.</span><span>Smarter journeys. A brighter tomorrow. ∞</span></footer>
+    </section>
+
+    <section id="journey" class="screen page-screen route-page">
+  <div class="route-hero-head">
+    <div class="route-heading">
+      <button class="back-circle" id="backHome" aria-label="Change trip">←</button>
+      <div>
+        <span class="eyebrow dark">ROUTE DETAILS · AI PLANNED</span>
+        <h2 id="journeyTitle">KDU Smart Campus <em>→</em> Colombo Fort</h2>
+        <p><span class="live-dot"></span> Updated just now · 18 min · 12.8 km · 2 transfers</p>
+      </div>
+    </div>
+    <div class="route-head-actions"><button class="secondary" id="shareJourney">↗ Share</button><button class="secondary" id="saveJourney">♡ Save</button></div>
+  </div>
+
+  <div class="route-alert card live-update-card">
+    <div class="alert-icon">✦</div>
+    <div><b>Good news — your journey is running smoothly.</b><span>All planned connections are protected. If anything changes, RIDE will update your route automatically.</span></div>
+    <strong class="on-time" id="routeStatus">LIVE · ON TIME</strong>
+  </div>
+
+  <div class="live-update-strip card" id="liveUpdateStrip"><span class="pulse"></span><div><b id="liveUpdateTitle">Live update</b><span id="liveUpdateText">Checking vehicles, traffic and transfer connections…</span></div><time id="liveUpdateTime">now</time></div>
+
+  <div class="route-overview-grid">
+    <article class="route-main card">
+      <div class="route-main-top">
+        <div><span class="eyebrow dark">YOUR JOURNEY</span><h3>Travel timeline</h3></div>
+        <div class="arrival-box"><small>ARRIVE BY</small><b>10:42 AM</b><span>18 min · 12.8 km</span></div>
+      </div>
+
+      <div class="journey-line">
+        <div class="journey-stop origin"><div class="stop-node">●</div><div class="stop-copy"><span>10:24 AM · NOW</span><b>KDU Smart Campus</b><small>Gate A · Walk 2 min</small></div><em>Start</em></div>
+
+        <div class="journey-leg road-leg"><div class="leg-icon">◇</div><div class="leg-info"><span>SMART ROAD · AUTONOMOUS</span><b>4 min</b><small>Step-free boarding · Low traffic</small></div><button class="details-btn" data-toast="Smart road segment: 4 minutes">Details</button></div>
+
+        <div class="journey-stop"><div class="stop-node bus-node">🚌</div><div class="stop-copy"><span>10:28 AM · BUS A12</span><b>Autonomous Bus A12</b><small>2 stops · Priority boarding available</small></div><em class="mode-status">● On time</em></div>
+
+        <div class="transfer-chip"><span>TRANSFER · 1 MIN</span><b>Protected connection</b></div>
+
+        <div class="journey-leg rail-leg"><div class="leg-icon">🚆</div><div class="leg-info"><span>MAGLEV M03 · PLATFORM 2</span><b>9 min</b><small>Direct service · Transfer reserved</small></div><button class="details-btn" data-toast="Maglev M03 departs Platform 2 at 10:33 AM">Details</button></div>
+
+        <div class="journey-stop"><div class="stop-node train-node">🚆</div><div class="stop-copy"><span>10:33 AM · MAGLEV M03</span><b>Colombo Coastal Maglev</b><small>Express to Colombo Fort · 1 stop</small></div><em class="mode-status">● On time</em></div>
+
+        <div class="transfer-chip arrival-chip"><span>FINAL WALK · 5 MIN</span><b>Skyway connection</b></div>
+
+        <div class="journey-stop destination"><div class="stop-node end-node">◆</div><div class="stop-copy"><span>10:42 AM · ARRIVAL</span><b>Colombo Fort Central</b><small>Concourse B · Accessible exit nearby</small></div><em>Destination</em></div>
+      </div>
+
+      <div class="route-ai-note"><div class="ai-glow">✦</div><div><span>RIDE INTELLIGENCE</span><b>Your route is protected</b><p>Traffic is rising on the coastal corridor. This plan saves about 7 minutes and keeps your transfer protected.</p></div><button id="alternativeRoute">See alternative</button></div>
+      <button class="primary big track-btn" id="track">Track this journey <b>→</b></button>
+    </article>
+
+    <aside class="route-side">
+      <div class="route-score card"><div class="score-top"><div><span class="eyebrow dark">JOURNEY HEALTH</span><h3>82%</h3></div><div class="score-ring"><span>82</span><small>%</small></div></div><div class="score-bars"><span><i style="width:94%"></i> On-time reliability <b>94</b></span><span><i style="width:86%"></i> Transfer safety <b>86</b></span><span><i style="width:76%"></i> Energy efficiency <b>76</b></span></div></div>
+
+      <div class="connection-card card"><div class="card-title-row"><div><span class="eyebrow dark">LIVE CONNECTIONS</span><h3>Everything is on time.</h3></div><span class="live-badge"><i></i> LIVE</span></div><div class="connection-row"><span class="mode-circle bus">🚌</span><div><b>Bus A12</b><small>Next departure 10:28 AM</small></div><strong>2 min</strong></div><div class="connection-row"><span class="mode-circle train">🚆</span><div><b>Maglev M03</b><small>Platform 2 · Reserved</small></div><strong>5 min</strong></div></div>
+
+      <div class="preferences-card card"><span class="eyebrow dark">YOUR PREFERENCES</span><h3>Travel your way.</h3><div class="preference-chips"><button class="pref active">⚡ Fastest</button><button class="pref">♿ Step-free</button><button class="pref">🌿 Low energy</button><button class="pref">↔ Fewer transfers</button></div><button class="edit-pref" id="editPrefs">⚙ Adjust preferences</button></div>
+    </aside>
+  </div>
+
+  <div class="route-bottom-grid">
+    <article class="route-preview card"><div class="preview-head"><div><span class="eyebrow dark">ROUTE PREVIEW</span><h3>Follow your journey at a glance</h3></div><span class="mini-live"><i></i> Live network</span></div><div class="route-image"><img src="assets/live-map-art.jpg" alt="Futuristic Colombo route preview"><svg viewBox="0 0 800 300" preserveAspectRatio="none"><path d="M65 235 C175 230 205 180 290 195 S405 155 470 120 S585 95 720 55"></path></svg><span class="preview-pin p1">KDU</span><span class="preview-pin p2">A12</span><span class="preview-pin p3">M03</span><span class="preview-pin p4">FORT</span><div class="moving-dot"></div></div></article>
+    <article class="safety-card card"><span class="eyebrow dark">DESIGNED FOR EVERYONE</span><h3>Nothing important is hidden.</h3><div class="safety-list"><span>✓ Clear step-by-step instructions</span><span>✓ Large, readable journey times</span><span>✓ Step-free boarding information</span><span>✓ Voice guidance available</span></div><button id="voiceRoute" class="secondary">◉ Hear my next step</button></article>
+  </div>
+</section>
+
+<section id="live" class="screen page-screen live-pro-screen">
+  <div class="live-pro-head">
+    <div class="live-pro-title">
+      <button class="back-circle" id="liveBack" aria-label="Back to journey">←</button>
+      <div>
+        <div class="live-kicker"><span class="live-dot"></span> LIVE JOURNEY · TRACKING NOW</div>
+        <h2>Colombo Fort <em>→</em> KDU</h2>
+        <p><b id="liveEta">10:45 AM</b> arrival · <span id="liveRemaining">32 min remaining</span> · 12.4 km</p>
+      </div>
+    </div>
+    <div class="live-head-actions">
+      <button class="secondary" id="shareLive">↗ Share live trip</button>
+      <button class="secondary" id="centerLive">⌾ Recenter</button>
+    </div>
+  </div>
+
+  <div class="tracking-status card">
+    <div class="status-main"><span class="status-pulse"></span><div><b id="trackingStatus">You're on the move</b><span id="trackingSub">Bus A12 is approaching Pettah. Your connection is protected.</span></div></div>
+    <div class="status-stats"><span><small>NEXT STOP</small><b id="nextStop">Pettah</b></span><span><small>ETA</small><b id="nextEta">2 min</b></span><span><small>VEHICLE</small><b>Bus A12</b></span></div>
+  </div>
+
+  <div class="live-pro-layout">
+    <aside class="live-guide card">
+      <div class="guide-head"><div><span class="eyebrow dark">YOUR JOURNEY</span><h3>Follow your trip</h3></div><div class="guide-head-actions"><span class="live-badge"><i></i> LIVE</span><button class="follow-btn" id="followTrip" type="button">Follow live <b>→</b></button></div></div>
+      <div class="mode-rail">
+        <div class="mode-node active"><span>🚌</span><b>Bus</b><small>Now · 2 min</small></div><i></i>
+        <div class="mode-node"><span>🚆</span><b>Train</b><small>12 min</small></div><i></i>
+        <div class="mode-node"><span>✈</span><b>Air</b><small>7 min</small></div><i></i>
+        <div class="mode-node"><span>🚗</span><b>Road</b><small>4 min</small></div>
+      </div>
+      <div class="next-step-box"><div class="step-icon">↗</div><div><span>NEXT STEP</span><b>Stay on Bus A12</b><p>Get off at <strong>Pettah</strong>. We'll alert you before your transfer.</p></div></div>
+      <div class="guide-timeline">
+        <div class="guide-item active"><time>10:12</time><span class="guide-dot"></span><div><b>Bus A12</b><small>Colombo Fort → Pettah</small><em>On time · 2 min away</em></div></div>
+        <div class="guide-item"><time>10:20</time><span class="guide-dot"></span><div><b>Maglev M03</b><small>Pettah → Wellawatte</small><em>Connection protected</em></div></div>
+        <div class="guide-item"><time>10:32</time><span class="guide-dot"></span><div><b>Air Taxi</b><small>Wellawatte → KDU</small><em>Arriving in 7 min</em></div></div>
+        <div class="guide-item"><time>10:41</time><span class="guide-dot"></span><div><b>Autonomous Shuttle</b><small>KDU Skyway → Entrance</small><em>Arriving in 4 min</em></div></div>
+      </div>
+      <div class="live-ai"><span>✦</span><div><b>RIDE Intelligence</b><p id="aiLiveText">Traffic is light on the coastal corridor. Your arrival remains protected.</p></div></div>
+    </aside>
+
+    <section class="live-pro-map card" aria-label="Live journey map">
+      <div class="map-toolbar"><div class="map-title"><span class="map-live-indicator"><i></i> LIVE MAP</span><small>Real-time vehicle tracking</small></div><div class="map-tools"><button id="liveZoomIn" aria-label="Zoom in">+</button><button id="liveZoomOut" aria-label="Zoom out">−</button><button id="liveLocate" aria-label="Locate me">⌾</button><button id="liveLayers" aria-label="Map layers">▱</button></div></div>
+      <div class="pro-map-canvas" id="proMapCanvas">
+        <img src="assets/live-map-art.jpg" alt="Futuristic Colombo live transport map" class="pro-map-art">
+        <div class="map-grid-overlay"></div>
+        <svg class="pro-route-line" viewBox="0 0 854 845" preserveAspectRatio="none" aria-hidden="true"><path d="M105 785 C205 745 245 690 305 600 C365 510 350 455 430 375 C510 295 525 245 610 190 C680 145 730 115 785 92"></path></svg>
+        <div class="vehicle-orb orb-bus"><span>🚌</span><b>A12</b></div>
+        <div class="vehicle-orb orb-train"><span>🚆</span><b>M03</b></div>
+        <div class="vehicle-orb orb-air"><span>✈</span><b>SKY</b></div>
+        <div class="you-pulse"><i></i><span>YOU</span></div>
+        <div class="map-label-card fort-label">Colombo Fort <small>Start</small></div>
+        <div class="map-label-card pettah-label">Pettah <small>Next stop · 2 min</small></div>
+        <div class="map-label-card kdu-label">KDU <small>Destination</small></div>
+      </div>
+      <div class="map-foot"><span><b>Colombo Metroplex</b><small>42 active corridors · 11,204 vehicles</small></span><button id="mapDetails">View network details →</button></div>
+    </section>
+  </div>
+
+  <div class="live-bottom-grid">
+    <article class="live-progress-card card"><div class="live-bottom-head"><div><span class="eyebrow dark">JOURNEY PROGRESS</span><h3>You're 62% through your trip</h3></div><span class="arrival-chip">ARRIVE <b id="arrivalBottom">10:45 AM</b></span></div><div class="progress-journey"><div class="progress-node done"><span>✓</span><b>Fort</b><small>10:12</small></div><i class="done-line"></i><div class="progress-node active"><span>🚌</span><b>Pettah</b><small>10:20</small></div><i></i><div class="progress-node"><span>🚆</span><b>Wellawatte</b><small>10:32</small></div><i></i><div class="progress-node"><span>⌖</span><b>KDU</b><small>10:45</small></div></div></article>
+    <article class="voice-card card"><div class="voice-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div><span class="eyebrow dark">VOICE GUIDANCE</span><h3>Next stop: Pettah</h3><p>We'll let you know when it's time to prepare for your transfer.</p></div><button id="speakLive">🔊</button></article>
+    <article class="weather-card card"><span class="eyebrow dark">CITY CONDITIONS</span><b>26°C</b><span>Partly cloudy · Colombo</span><small>Roads smooth · Air routes clear</small></article>
+  </div>
+</section>
+  </main>
+
+  <div id="accessPanel" class="access-panel" aria-hidden="true"><div class="panel-head"><b>Easy Mode</b><button id="closeAccess">×</button></div><p>Make RIDE easier to read and use.</p><label class="toggle"><span>Larger text</span><input id="large" type="checkbox"><i></i></label><label class="toggle"><span>High contrast</span><input id="contrast" type="checkbox"><i></i></label><label class="toggle"><span>Reduced motion</span><input id="motion" type="checkbox"><i></i></label><button id="voicePanel" class="panel-action">◉ Hear next step</button></div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script>
+</body>
+</html>
